@@ -15,6 +15,9 @@ process DOWNSAMPLE_RATE {
 	script:
 	"""
 	REFERENCE_LEN=\$(awk '!/^>/ {len+=length(\$0)} END {print len}' < ${reference_fasta})
+
+	# Changed command to count number of reads
+
 	READS_FILES_LEN=\$(zcat ${reads} | wc -l)
 	READS_LEN=\$((READS_FILES_LEN/4))
 	
@@ -25,7 +28,8 @@ process DOWNSAMPLE_RATE {
 
 	fi
 
-	# Calculate number of reads
+	# Calculate number of reads. Changed original code
+
 	NUM_READS=\$(zcat ${reads[0]}|awk 'END {print NR/4}')
 	SAMPLED_NUM_READS=\$(echo "\${NUM_READS} \${SAMPLE_RATE}" | awk '{x=\$1*\$2} END {printf "%.0f", x}')
 	"""
